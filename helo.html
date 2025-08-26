@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Prince Joshi — Futuristic Web Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0b10;               /* deep space */
+      --bg-2:#0d0f1a;             /* slightly lighter */
+      --text:#e6e9ff;             /* off white */
+      --muted:#b7c0ff;            /* soft indigo */
+      --neon:#6ee7ff;             /* cyan glow */
+      --neon-2:#7c3aed;           /* purple glow */
+      --card:#0e1222cc;           /* glass */
+      --border:#2b2f45;           /* subtle lines */
+      --ok:#22c55e;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 10% -10%, #1b1f39 0%, transparent 60%),
+        radial-gradient(1000px 600px at 110% 10%, #151b2f 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, #090a12 100%);
+      overflow-x:hidden;
+      /* safe-area for notches */
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+
+    /* animated accent orbs */
+    .orb{position:fixed; width:44vmax; height:44vmax; filter:blur(60px); opacity:.25; z-index:-2; border-radius:50%; mix-blend-mode:screen; pointer-events:none}
+    .orb.cyan{background:radial-gradient(circle at 30% 30%, #00eaff, transparent 55%); left:-10vmax; top:-8vmax; animation:float1 16s ease-in-out infinite}
+    .orb.purple{background:radial-gradient(circle at 70% 70%, #7c3aed, transparent 55%); right:-12vmax; bottom:-8vmax; animation:float2 18s ease-in-out infinite}
+    @keyframes float1{50%{transform:translate(3vmax,2vmax)}}
+    @keyframes float2{50%{transform:translate(-3vmax,-2vmax)}}
+
+    /* layout */
+    .container{max-width:1150px; margin:0 auto; padding:0 20px}
+    section{padding:70px 0}
+    .section-title{font-family:Orbitron; font-size:26px; letter-spacing:1.5px; margin:0 0 12px}
+    .section-sub{color:#b6c0ff; opacity:.9; margin:0 0 26px}
+
+    /* header */
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter:blur(10px);
+      background:linear-gradient(180deg, rgba(10,11,16,.88) 0%, rgba(10,11,16,.6) 100%);
+      border-bottom:1px solid var(--border);
+    }
+    .nav{max-width:1150px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:14px 20px}
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text)}
+    .logo{width:38px; height:38px; border-radius:14px; background:linear-gradient(135deg, var(--neon), var(--neon-2));
+          box-shadow:0 0 18px 4px rgba(110,231,255,.35), inset 0 0 22px rgba(124,58,237,.4); display:grid; place-items:center; font-family:Orbitron; font-weight:700}
+    .logo span{font-size:18px; color:#03121a}
+    .brand h1{font-family:Orbitron; font-size:16px; letter-spacing:2px; margin:0; opacity:.95}
+    /* desktop nav */
+    nav.primary{display:flex; gap:6px}
+    nav.primary a{color:var(--muted); text-decoration:none; padding:8px 12px; border-radius:999px; border:1px solid transparent}
+    nav.primary a:hover{border-color:#334; color:var(--text)}
+    .btn{padding:12px 18px; border-radius:14px; font-weight:600; border:1px solid #2e3350; background:#0f1428; color:var(--text); text-decoration:none; transition:.25s; position:relative}
+    .btn.primary{background:linear-gradient(135deg,var(--neon),var(--neon-2)); color:#061018; border-color:transparent; box-shadow:0 10px 30px rgba(110,231,255,.15)}
+    .btn:hover{transform:translateY(-2px); box-shadow:0 8px 22px rgba(124,58,237,.12)}
+
+    /* mobile menu */
+    .menu-toggle{
+      display:none; background:none; border:1px solid #2b2f45; color:var(--text);
+      padding:8px 12px; border-radius:10px; font-size:16px
+    }
+    .drawer{
+      display:none; border-top:1px solid var(--border); background:rgba(13,16,28,.96); backdrop-filter:blur(8px)
+    }
+    .drawer a{display:block; padding:14px 20px; color:var(--muted); text-decoration:none; border-bottom:1px solid #1c2136}
+    .drawer a:last-child{border-bottom:none}
+    .drawer.show{display:block}
+
+    /* hero */
+    .hero{display:grid; grid-template-columns:1.1fr .9fr; gap:30px; align-items:center; min-height:78svh; padding:60px 0}
+    .tag{display:inline-flex; gap:8px; align-items:center; border:1px solid #2a2f4a; padding:8px 12px; border-radius:999px; background:#0b1022aa}
+    .tag .dot{width:8px;height:8px;border-radius:50%; background:var(--ok); box-shadow:0 0 10px var(--ok)}
+    h2.big{font-family:Orbitron; font-size:clamp(34px,5.2vw,62px); line-height:1.05; margin:14px 0 12px}
+    .grad{background:linear-gradient(135deg,var(--neon),var(--neon-2)); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .lead{color:#c7cffb; opacity:.95; font-size:18px; line-height:1.75; margin:8px 0 0}
+    .cta{display:flex; gap:12px; margin-top:22px}
+
+    .card{
+      background:linear-gradient(180deg, rgba(19,23,44,.65), rgba(12,14,28,.55));
+      border:1px solid #222845; border-radius:22px; padding:20px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 20px 50px rgba(3,10,24,.35)
+    }
+    .profile{position:relative; aspect-ratio:4/5; border-radius:22px; overflow:hidden; border:1px solid #1e2340}
+    .profile .glow{position:absolute; inset:0; background:
+      radial-gradient(120% 120% at 50% -20%, rgba(110,231,255,.28), transparent 50%),
+      radial-gradient(120% 120% at 110% 110%, rgba(124,58,237,.28), transparent 50%)}
+    .profile img{position:absolute; inset:auto 0 0 0; width:100%; object-fit:cover; filter:contrast(1.02) saturate(1.03)}
+
+    /* marquee strip */
+    .strip{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:#0a0e1f}
+    .marquee{display:flex; gap:40px; padding:14px 0; white-space:nowrap; overflow:hidden}
+    .marquee span{font-family:Orbitron; letter-spacing:2px; opacity:.8}
+    .marquee .pill{border:1px solid #2a2f4a; padding:6px 12px; border-radius:999px}
+    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .marquee .row{display:flex; gap:22px; min-width:200%; animation:ticker 24s linear infinite}
+
+    /* grids */
+    .grid{display:grid; gap:18px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+
+    /* services */
+    .service h3{margin:6px 0 8px}
+    .service p{opacity:.9}
+    .chip{display:inline-flex; gap:8px; align-items:center; font-size:12px; border:1px solid #2a2f4a; padding:6px 10px; border-radius:999px; color:#c7cffb}
+
+    /* work */
+    .work-card{position:relative; overflow:hidden}
+    .work-card img{width:100%; height:220px; object-fit:cover; border-radius:14px; border:1px solid #232842}
+    .work-meta{display:flex; align-items:center; justify-content:space-between; margin-top:10px}
+    .work-meta .title{font-weight:600}
+
+    /* testimonials */
+    .quote{font-style:italic; opacity:.95}
+    .avatar{width:38px; height:38px; border-radius:50%; background:#1a203a; border:1px solid #2a2f4a}
+
+    /* contact */
+    form{display:grid; gap:12px}
+    input, textarea{background:#0d1230; border:1px solid #2a2f4a; color:var(--text); padding:12px 14px; border-radius:12px; outline:none}
+    input:focus, textarea:focus{border-color:#445; box-shadow:0 0 0 3px rgba(124,58,237,.15)}
+
+    footer{padding:50px 0 70px; color:#a9b4ffb0; text-align:center}
+
+    /* ===== Mobile & small tablets ===== */
+    @media (max-width:900px){
+      /* show hamburger, collapse desktop nav */
+      .menu-toggle{display:block}
+      nav.primary{display:none}
+      .hero{grid-template-columns:1fr; padding-top:26px}
+      .grid.cols-3{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      /* prevent “chipka hua” look */
+      .container{padding-left:16px; padding-right:16px}
+      section{padding:46px 0}
+      h2.big{font-size:32px}
+      .lead{font-size:16px; line-height:1.7}
+      .cta{flex-direction:column}
+      .cta .btn{width:100%; text-align:center}
+      .work-card img{height:200px}
+    }
+  </style>
+</head>
+<body>
+  <div class="orb cyan" aria-hidden="true"></div>
+  <div class="orb purple" aria-hidden="true"></div>
+
+  <header>
+    <div class="nav">
+      <a class="brand" href="#hero" aria-label="Prince Joshi Home">
+        <div class="logo"><span>PJ</span></div>
+        <h1>PRINCE JOSHI</h1>
+      </a>
+
+      <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" id="menuBtn">☰ Menu</button>
+
+      <nav class="primary" aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="btn">Contact</a>
+      </nav>
+    </div>
+
+    <!-- mobile drawer -->
+    <div id="mobile-menu" class="drawer" role="dialog" aria-modal="false" aria-label="Mobile Menu">
+      <div class="container" style="padding:10px 20px">
+        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero">
+      <div class="container hero">
+        <div>
+          <div class="tag" aria-label="Availability"><span class="dot"></span> Available for projects — 2025</div>
+          <h2 class="big">I build <span class="grad">futuristic</span>, fast & trusted websites.</h2>
+          <p class="lead">Hi, I’m <strong>Prince Joshi</strong> — a Web Developer crafting modern portfolios, business sites & e-commerce that load fast, look premium, and convert. Let’s build your next big thing.</p>
+          <div class="cta">
+            <a class="btn primary" href="#contact">Hire Me</a>
+            <a class="btn" href="#work">See My Work</a>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:16px">
+            <span class="chip">Speed First</span>
+            <span class="chip">Secure</span>
+            <span class="chip">SEO Ready</span>
+            <span class="chip">WordPress</span>
+            <span class="chip">Elementor</span>
+          </div>
+        </div>
+        <div class="card profile" aria-hidden="true">
+          <div class="glow"></div>
+          <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=1200&auto=format&fit=crop" alt="Prince Joshi portrait placeholder" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Social proof strip -->
+    <div class="strip" aria-hidden="true">
+      <div class="container">
+        <div class="marquee">
+          <div class="row">
+            <span class="pill">WordPress</span>
+            <span class="pill">Elementor</span>
+            <span class="pill">Responsive</span>
+            <span class="pill">E-commerce</span>
+            <span class="pill">SEO</span>
+            <span class="pill">Performance 90+ (Lighthouse)</span>
+            <span class="pill">Secure</span>
+            <span class="pill">Support</span>
+            <span class="pill">Care Plans</span>
+            <!-- duplicate for seamless loop -->
+            <span class="pill">WordPress</span>
+            <span class="pill">Elementor</span>
+            <span class="pill">Responsive</span>
+            <span class="pill">E-commerce</span>
+            <span class="pill">SEO</span>
+            <span class="pill">Performance 90+ (Lighthouse)</span>
+            <span class="pill">Secure</span>
+            <span class="pill">Support</span>
+            <span class="pill">Care Plans</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <section id="services">
+      <div class="container">
+        <h3 class="section-title">Services</h3>
+        <p class="section-sub">From idea to launch — I design & develop high-converting websites with a futuristic aesthetic.</p>
+        <div class="grid cols-3">
+          <div class="card service">
+            <span class="chip">Portfolio</span>
+            <h3>Personal & Portfolio Sites</h3>
+            <p>Premium one-page or multi-page portfolios with animations, case studies, and lead generation. Clean structure, easy CMS, and fast page loads.</p>
+          </div>
+          <div class="card service">
+            <span class="chip">Business</span>
+            <h3>Business Websites</h3>
+            <p>Credible service sites that build trust, boost inquiries, and look premium across devices. Forms, maps, CTAs — all optimized.</p>
+          </div>
+          <div class="card service">
+            <span class="chip">Shop</span>
+            <h3>E-commerce (WooCommerce)</h3>
+            <p>Modern storefronts with filters, search, and smooth checkout. Stripe/Razorpay integration, product SEO, & analytics.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section id="work">
+      <div class="container">
+        <h3 class="section-title">Selected Work</h3>
+        <p class="section-sub">A few recent builds. In WordPress, Elementor, and custom code where it matters.</p>
+        <div class="grid cols-3">
+          <div class="work-card">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="Tech Portfolio UI"/>
+            <div class="work-meta">
+              <span class="title">Tech Portfolio</span>
+              <a class="btn" href="#" aria-label="View Tech Portfolio project">View</a>
+            </div>
+          </div>
+          <div class="work-card">
+            <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1200&auto=format&fit=crop" alt="Business site layout"/>
+            <div class="work-meta">
+              <span class="title">Business Site</span>
+              <a class="btn" href="#" aria-label="View Business Site project">View</a>
+            </div>
+          </div>
+          <div class="work-card">
+            <img src="https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1200&auto=format&fit=crop" alt="Shop UI mockup"/>
+            <div class="work-meta">
+              <span class="title">Shop UI</span>
+              <a class="btn" href="#" aria-label="View Shop UI project">View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container">
+        <h3 class="section-title">About</h3>
+        <div class="grid" style="grid-template-columns:1.2fr .8fr; gap:24px">
+          <div class="card">
+            <p class="lead" style="margin:0">
+              I’m Prince — a WordPress + Elementor developer focused on performance, security and a futuristic visual style. I build experiences that look premium and feel ultra-smooth.
+            </p>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px">
+              <div class="card" style="padding:14px"><strong>30+</strong><br/><span style="opacity:.8">Projects</span></div>
+              <div class="card" style="padding:14px"><strong>5★</strong><br/><span style="opacity:.8">Client Rating</span></div>
+              <div class="card" style="padding:14px"><strong>90+ ⚡</strong><br/><span style="opacity:.8">Lighthouse</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <h4 style="margin:0 0 10px">Tech Stack</h4>
+            <div style="display:flex; flex-wrap:wrap; gap:10px">
+              <span class="chip">WordPress</span>
+              <span class="chip">Elementor</span>
+              <span class="chip">WooCommerce</span>
+              <span class="chip">HTML</span>
+              <span class="chip">CSS</span>
+              <span class="chip">JavaScript</span>
+              <span class="chip">RankMath SEO</span>
+              <span class="chip">Performance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+      <div class="container">
+        <h3 class="section-title">What clients say</h3>
+        <div class="grid cols-3">
+          <div class="card">
+            <p class="quote">“Clean design, fast site, and amazing support. Prince delivered beyond expectations.”</p>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:10px">
+              <div class="avatar" aria-hidden="true"></div>
+              <div><strong>R. Sharma</strong><br/><span style="opacity:.75">Business Owner</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <p class="quote">“Our portfolio looks premium now. Love the futuristic vibe and smooth animations.”</p>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:10px">
+              <div class="avatar" aria-hidden="true"></div>
+              <div><strong>M. Gupta</strong><br/><span style="opacity:.75">Designer</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <p class="quote">“Great communication, SEO friendly build, and clear handover. Highly recommend.”</p>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:10px">
+              <div class="avatar" aria-hidden="true"></div>
+              <div><strong>A. Khan</strong><br/><span style="opacity:.75">Store Owner</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="container">
+        <h3 class="section-title">Let’s build your website</h3>
+        <p class="section-sub">Tell me about your project. I’ll reply within 24 hours.</p>
+        <div class="grid" style="grid-template-columns:1fr .9fr; gap:24px">
+          <div class="card">
+            <form onsubmit="event.preventDefault(); alert('Thanks! I will get back to you.'); this.reset();">
+              <label style="font-size:12px; opacity:.8">Your Name</label>
+              <input required type="text" placeholder="e.g., Rahul Verma" />
+
+              <label style="font-size:12px; opacity:.8">Email</label>
+              <input required type="email" placeholder="you@example.com" />
+
+              <label style="font-size:12px; opacity:.8">Company / Brand (optional)</label>
+              <input type="text" placeholder="Brand name (optional)" />
+
+              <label style="font-size:12px; opacity:.8">Project brief</label>
+              <textarea rows="5" placeholder="What do you need? Goals, pages, references, budget..."></textarea>
+
+              <button class="btn primary" type="submit">Send Message</button>
+            </form>
+          </div>
+          <div class="card">
+            <h4 style="margin:0 0 10px">Direct Contact</h4>
+            <p style="margin:0 0 8px">Email: <a href="mailto:hello@princejoshi.co.in" style="color:var(--neon)">hello@princejoshi.co.in</a></p>
+            <p style="margin:0 0 8px">WhatsApp: <a href="https://wa.me/91XXXXXXXXXX" style="color:var(--neon)">+91-XXXXXXXXXX</a></p>
+            <div style="display:flex; gap:10px; margin-top:10px">
+              <a class="btn" href="#" aria-label="GitHub profile">GitHub</a>
+              <a class="btn" href="#" aria-label="LinkedIn profile">LinkedIn</a>
+              <a class="btn" href="#" aria-label="Instagram profile">Instagram</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="y"></span> Prince Joshi • Built with ♥ & a futuristic vibe
+  </footer>
+
+  <script>
+    // Smooth anchor scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click
